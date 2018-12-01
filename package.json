@@ -1,0 +1,29 @@
+{
+  "name": "lambda-reward-verifier",
+  "version": "1.0.0",
+  "description": "Verifies that a user posted about promoter on IG.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prizeprofile/lambda-reward-verifier.git"
+  },
+  "author": "Michael Bausano",
+  "license": "ISC",
+  "homepage": "https://github.com/prizeprofile/lambda-reward-verifier#readme",
+  "scripts": {
+    "create:stage": "claudia create --name stage-reward-verifier --region eu-west-1 --handler index.handler --role arn:aws:iam::490542543401:role/DynamoDBFullAccess --config claudia-stage.json",
+    "create:prod": "claudia create --name prod-reward-verifier --region eu-west-1 --handler index.handler --role arn:aws:iam::490542543401:role/DynamoDBFullAccess --config claudia-prod.json",
+    "deploy:stage": "claudia update --config claudia-stage.json",
+    "deploy:prod": "claudia update --config claudia-prod.json"
+  },
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.250.1"
+  },
+  "devDependencies": {
+    "claudia": "^5.1.1"
+  }
+}
