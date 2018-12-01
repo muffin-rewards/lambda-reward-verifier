@@ -14,15 +14,15 @@ exports.handler = async (event, _, callback) => {
 
   const { Item } = await ddb.getItem({
     Key: {
-      id: { S: message.id }
+      id: { S: message.reward }
     },
     TableName: process.env.DDB_REWARDS_TABLE,
-    AttributesToGet: ['promoter', 'location']
+    AttributesToGet: ['location']
   }).promise()
 
   const post = await searchPosts(message.token, Item.location.NS)
 
-  await persistEntry(message.token, post.id, message.id)
+  await persistEntry(message.token, post.id, message.reward)
 
   callback(null, 'Reward confirmation successful')
 }
