@@ -21,7 +21,9 @@
     "test": "test"
   },
   "dependencies": {
-    "aws-sdk": "^2.250.1"
+    "aws-sdk": "^2.250.1",
+    "axios": "^0.18.0",
+    "geolib": "^2.0.24"
   },
   "devDependencies": {
     "claudia": "^5.1.1"
