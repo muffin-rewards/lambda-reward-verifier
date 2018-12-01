@@ -11,7 +11,8 @@ module.exports = (token, { id }, promoter) => {
       code: { S: code },
       userId: { S: token },
       promoter: { S: promoter },
-      id: { S: id }
+      id: { S: id },
+      used: { N: 0 }
     },
     TableName: process.env.DDB_ENTRIES_TABLE
   }).promise()
