@@ -4,7 +4,7 @@ const ddb = new AWS.DynamoDB()
 const searchPosts = require('./src/searchPosts')
 const persistEntry = require('./src/persistEntry')
 
-exports.handler = (event, _, callback) => {
+exports.handler = async (event, _, callback) => {
   /**
    * A message is stringified object that contains
    * properties token and reward id.
@@ -12,16 +12,17 @@ exports.handler = (event, _, callback) => {
    */
   const message = JSON.parse(event.Records.pop().Sns.Message)
 
-  return ddb.getItem({
+  const { Item } = await ddb.getItem({
     Key: {
       id: { S: message.id }
     },
     TableName: process.env.DDB_REWARDS_TABLE,
-    AttributesToGet: ['location']
+    AttributesToGet: ['promoter', 'location']
   }).promise()
-    .then(({ Item }) => searchPosts(message.token, Item.location.NS))
-    .then(post => persistEntry(post))
-    .then(() => callback(null, 'Reward confirmation successful'))
-    //.catch(() => callback('Reward confirmation failed.'))
-    .catch(console.log)
+
+  const post = await searchPosts(message.token, Item.location.NS)
+
+  await persistEntry(message.token, post, Item.promoter.S)
+
+  callback(null, 'Reward confirmation successful')
 }
