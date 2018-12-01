@@ -22,7 +22,7 @@ exports.handler = async (event, _, callback) => {
 
   const post = await searchPosts(message.token, Item.location.NS)
 
-  await persistEntry(message.token, post, Item.promoter.S)
+  await persistEntry(message.token, post.id, message.id)
 
   callback(null, 'Reward confirmation successful')
 }

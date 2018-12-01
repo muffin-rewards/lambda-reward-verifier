@@ -3,14 +3,14 @@ AWS.config.update({ region: 'eu-west-1' })
 const ddb = new AWS.DynamoDB()
 const crypto = require('crypto')
 
-module.exports = (token, { id }, promoter) => {
+module.exports = (token, id, reward) => {
   const code = crypto.randomBytes(48).toString('hex')
 
   return ddb.putItem({
     Item: {
       code: { S: code },
       userId: { S: token },
-      promoter: { S: promoter },
+      reward: { S: reward },
       id: { S: id },
       used: { BOOL: false }
     },
