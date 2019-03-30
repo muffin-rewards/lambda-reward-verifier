@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk')
-const searchPosts = require('./searchPosts')
-const persistEntry = require('./persistEntry')
+const searchPosts = require('./src/searchPosts')
+const persistEntry = require('./src/persistEntry')
 
 AWS.config.update({ region: 'eu-west-1' })
 const ddb = new AWS.DynamoDB()

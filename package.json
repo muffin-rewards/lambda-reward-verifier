@@ -2,7 +2,7 @@
   "name": "lambda-reward-verifier",
   "version": "1.0.0",
   "description": "Verifies that a user posted about promoter on IG.",
-  "main": "src/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/prizeprofile/lambda-reward-verifier.git"
