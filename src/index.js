@@ -1,8 +1,9 @@
 const AWS = require('aws-sdk')
+const searchPosts = require('./searchPosts')
+const persistEntry = require('./persistEntry')
+
 AWS.config.update({ region: 'eu-west-1' })
 const ddb = new AWS.DynamoDB()
-const searchPosts = require('./src/searchPosts')
-const persistEntry = require('./src/persistEntry')
 
 exports.handler = async (event, _, callback) => {
   /**
@@ -12,17 +13,23 @@ exports.handler = async (event, _, callback) => {
    */
   const message = JSON.parse(event.Records.pop().Sns.Message)
 
+  /**
+   * Finds a client IG handle for reward ID.
+   */
   const { Item } = await ddb.getItem({
     Key: {
       id: { S: message.reward }
     },
     TableName: process.env.DDB_REWARDS_TABLE,
-    AttributesToGet: ['location']
+    AttributesToGet: ['handle'],
   }).promise()
 
-  const post = await searchPosts(message.token, Item.location.NS)
+  // Gets the IG post information from the APIs. This throws if no valid post
+  // was found or the token sent in the message was invalid.
+  const post = await searchPosts(message.token, Item.handle.S)
 
-  await persistEntry(message.token, post.id, message.reward)
+  // Saves the entry into a DynamoDB.
+  await persistEntry(message.token, post, message.reward)
 
   callback(null, 'Reward confirmation successful')
 }

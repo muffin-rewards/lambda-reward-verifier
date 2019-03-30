@@ -2,7 +2,7 @@
   "name": "lambda-reward-verifier",
   "version": "1.0.0",
   "description": "Verifies that a user posted about promoter on IG.",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/prizeprofile/lambda-reward-verifier.git"
@@ -22,8 +22,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.250.1",
-    "axios": "^0.18.0",
-    "geolib": "^2.0.24"
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "claudia": "^5.1.1"

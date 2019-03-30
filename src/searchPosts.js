@@ -1,32 +1,29 @@
 const axios = require('axios')
-const geolib = require('geolib')
+
+/**
+ * @var {string} endpoint Instagram APIs endpoint to query
+ */
 const endpoint = 'https://api.instagram.com/v1/users/self/media/recent'
 
-module.exports = async (token, location) => {
-  const url = `${endpoint}?access_token=${token}`
+/**
+ * Fetches user posts from IG and validates them.
+ *
+ * @param {string} token User IG valid token to access the endpoint
+ * @param {string} handle Client IG handle that needs to be in the caption
+ * @return Post fetched from the APIs
+ */
+module.exports = async (token, handle) => {
+  // Gets the data from the APIs.
+  const { data } = await axios.get(`${endpoint}?access_token=${token}`)
 
-  const { data } = await axios.get(url)
-
-  const post = data.data.find(post => validate(post, location))
+  // Finds a valid post that includes restaurant handle in its caption.
+  const post = data.data.find(
+    post => post.caption && post.caption.text.includes(handle),
+  )
 
   if (! post) {
     throw new Error('No post could be find')
   }
 
   return post
-}
-
-const validate = (post, location) => {
-  if (! post.location) {
-    return false
-  }
-
-  const [ latitude, longitude ] = location
-
-  const distance = geolib.getDistance(
-    post.location,
-    { latitude, longitude }
-  )
-
-  return distance < process.env.MAX_DISTANCE
 }
