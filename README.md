@@ -5,10 +5,10 @@ Checks the APIs for if a competition has been entered.
 The event object has to be of following structure:
 
 ```
-event.Records[0].Sns.message = {
-    ...
+event.body = {
     "token": String,
-    "id": String
+    "promoter": String,
+    "slug": String,
 }
 ```
 

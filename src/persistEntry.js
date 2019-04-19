@@ -1,27 +1,42 @@
 const AWS = require('aws-sdk')
-AWS.config.update({ region: 'eu-west-1' })
+const { AlreadyRedeemedException } = require('./exceptions')
+
 const ddb = new AWS.DynamoDB()
-const crypto = require('crypto')
+AWS.config.update({ region: 'eu-west-1' })
 
 /**
  * Saves information about IG post (which is the way user qualifies for reward)
  * into a DynamoDB.
  *
- * @param {string} token User to match the post to
+ * @param {string} promoter Restaurant that promotes this reward
  * @param {object} post Instagram response with post information
- * @param {string} reward Reward id
  */
-module.exports = (token, post, reward) => {
-  const code = crypto.randomBytes(48).toString('hex')
+module.exports = async (promoter, post) => {
+  console.log('persisting', promoter, post)
+
+  const { Item } = await ddb.getItem({
+    Key: {
+      user: { S: post.user.username },
+      promoter: { S: message.promoter },
+    },
+    TableName: process.env.DDB_ENTRIES_TABLE,
+    AttributesToGet: ['handle'],
+  }).promise()
+
+  console.log('persist', Item)
+
+  if (Item && Item.handle) {
+    throw new AlreadyRedeemedException
+  }
 
   return ddb.putItem({
     Item: {
-      postId: { S: post.id },
-      link: { S: post.link },
-      userId: { S: token },
-      reward: { S: reward },
-      id: { S: code },
-      used: { BOOL: false },
+      promoter: { S: promoter },
+      url: { S: post.text },
+      caption: { S: post.caption.text },
+      redeemedAt: { N: Date.now() },
+      user: { S: post.user.username },
+      image: { S: post.images.standard_resolution.url || '' },
     },
     TableName: process.env.DDB_ENTRIES_TABLE,
   }).promise()
