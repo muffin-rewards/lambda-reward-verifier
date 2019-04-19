@@ -51,7 +51,7 @@ exports.handler = async (event, _, callback) => {
     const post = await searchPosts(message.token, message.promoter)
 
     // Saves the entry into a DynamoDB.
-    await persistEntry(message.promoter, post)
+    await persistEntry(message.promoter, message.slug, post)
 
     respond(200)
   } catch (error) {

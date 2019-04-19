@@ -9,9 +9,10 @@ AWS.config.update({ region: 'eu-west-1' })
  * into a DynamoDB.
  *
  * @param {string} promoter Restaurant that promotes this reward
+ * @param {string} reward Slug of  certain reward
  * @param {object} post Instagram response with post information
  */
-module.exports = async (promoter, post) => {
+module.exports = async (promoter, reward, post) => {
   const { Item } = await ddb.getItem({
     Key: {
       user: { S: post.user.username },
@@ -29,6 +30,7 @@ module.exports = async (promoter, post) => {
     Item: {
       mediaId: { S: String(post.id) },
       promoter: { S: promoter },
+      reward: { S: reward },
       url: { S: post.link },
       caption: { S: post.caption.text },
       redeemedAt: { S: String(Date.now()) },
