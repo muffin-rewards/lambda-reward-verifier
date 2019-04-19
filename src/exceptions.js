@@ -20,7 +20,7 @@ exports.AlreadyRedeemedException = class AlreadyRedeemedException extends Lambda
    * @constructor
    */
   constructor () {
-    super(400, 'Reward already redeemed.')
+    super(400, 'Reward Already Claimed!')
   }
 
 }
@@ -30,8 +30,8 @@ exports.PostNotFoundException = class PostNotFoundException extends LambdaExcept
   /**
    * @constructor
    */
-  constructor () {
-    super(404, 'No post found.')
+  constructor (handle) {
+    super(404, `No Post Found for @${handle} - please check the steps above`)
   }
 
 }

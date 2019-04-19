@@ -24,7 +24,7 @@ module.exports = async (token, handle) => {
     }
   }
 
-  throw new PostNotFoundException
+  throw new PostNotFoundException(handle)
 }
 
 const fetchPost = async (token, handle) => {

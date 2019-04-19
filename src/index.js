@@ -59,6 +59,6 @@ exports.handler = async (event, _, callback) => {
 
     return error instanceof LambdaException
       ? respond(error.status, error.message)
-      : respond(422, '')
+      : respond(422, 'Woops, something went wrong. Please, try again later.')
   }
 }
