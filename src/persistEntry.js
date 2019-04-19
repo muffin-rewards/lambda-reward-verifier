@@ -12,31 +12,28 @@ AWS.config.update({ region: 'eu-west-1' })
  * @param {object} post Instagram response with post information
  */
 module.exports = async (promoter, post) => {
-  console.log('persisting', promoter, post)
-
   const { Item } = await ddb.getItem({
     Key: {
       user: { S: post.user.username },
-      promoter: { S: message.promoter },
+      promoter: { S: promoter },
     },
     TableName: process.env.ENTRIES_TABLE,
-    AttributesToGet: ['handle'],
+    AttributesToGet: ['redeemedAt'],
   }).promise()
 
-  console.log('persist', Item)
-
-  if (Item && Item.handle) {
+  if (Item) {
     throw new AlreadyRedeemedException
   }
 
   return ddb.putItem({
     Item: {
+      mediaId: { S: String(post.id) },
       promoter: { S: promoter },
-      url: { S: post.text },
+      url: { S: post.link },
       caption: { S: post.caption.text },
-      redeemedAt: { N: Date.now() },
+      redeemedAt: { S: String(Date.now()) },
       user: { S: post.user.username },
-      image: { S: post.images.standard_resolution.url || '' },
+      image: { S: post.images.standard_resolution.url },
     },
     TableName: process.env.ENTRIES_TABLE,
   }).promise()

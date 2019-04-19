@@ -8,6 +8,7 @@ The event object has to be of following structure:
 event.body = {
   "token": String,
   "promoter": String,
+  "slug": String,
 }
 ```
 

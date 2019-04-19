@@ -35,3 +35,14 @@ exports.PostNotFoundException = class PostNotFoundException extends LambdaExcept
   }
 
 }
+
+exports.RewardNotFoundException = class RewardNotFoundException extends LambdaException {
+
+  /**
+   * @constructor
+   */
+  constructor () {
+    super(404, 'Reward does not exist.')
+  }
+
+}

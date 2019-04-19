@@ -17,7 +17,7 @@ module.exports = async (token, handle) => {
   for (let i = 0; i < Number(process.env.MAX_RETRIES); i++) {
     try {
       return await fetchPost(token, handle)
-    } catch {
+    } catch (_) {
       await new Promise(
         resolve => setTimeout(resolve, Number(process.env.DELAY_BETWEEN_RETRIES)),
       )
@@ -30,8 +30,6 @@ module.exports = async (token, handle) => {
 const fetchPost = async (token, handle) => {
   // Gets the data from the APIs.
   const { data } = await axios.get(`${endpoint}?access_token=${token}`)
-
-  console.log('fetchPost', data)
 
   // Finds a valid post that includes restaurant handle in its caption.
   const post = data.data.find(

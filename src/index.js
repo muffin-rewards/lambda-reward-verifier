@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const searchPosts = require('./searchPosts')
 const persistEntry = require('./persistEntry')
-const { LambdaException } = require('./exceptions')
+const { LambdaException, RewardNotFoundException } = require('./exceptions')
 
 AWS.config.update({ region: 'eu-west-1' })
 const ddb = new AWS.DynamoDB()
@@ -36,22 +36,25 @@ exports.handler = async (event, _, callback) => {
     const { Item } = await ddb.getItem({
       Key: {
         promoter: { S: message.promoter },
+        slug: { S: message.slug },
       },
       TableName: process.env.REWARDS_TABLE,
-      AttributesToGet: ['handle'],
     }).promise()
+
+    // TODO: Check for non existence.
+    if (!Item) {
+      throw new RewardNotFoundException
+    }
 
     // Gets the IG post information from the APIs. This throws if no valid post
     // was found or the token sent in the message was invalid.
-    const post = await searchPosts(message.token, Item.handle.S)
-
-    console.log('Post', post)
+    const post = await searchPosts(message.token, message.promoter)
 
     // Saves the entry into a DynamoDB.
     await persistEntry(message.promoter, post)
 
     respond(200)
-  } catch(error) {
+  } catch (error) {
     console.log('error', error)
 
     return error instanceof LambdaException
