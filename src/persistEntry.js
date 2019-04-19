@@ -19,7 +19,7 @@ module.exports = async (promoter, post) => {
       user: { S: post.user.username },
       promoter: { S: message.promoter },
     },
-    TableName: process.env.DDB_ENTRIES_TABLE,
+    TableName: process.env.ENTRIES_TABLE,
     AttributesToGet: ['handle'],
   }).promise()
 
@@ -38,6 +38,6 @@ module.exports = async (promoter, post) => {
       user: { S: post.user.username },
       image: { S: post.images.standard_resolution.url || '' },
     },
-    TableName: process.env.DDB_ENTRIES_TABLE,
+    TableName: process.env.ENTRIES_TABLE,
   }).promise()
 }

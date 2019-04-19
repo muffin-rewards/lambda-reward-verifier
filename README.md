@@ -6,15 +6,16 @@ The event object has to be of following structure:
 
 ```
 event.body = {
-    "token": String,
-    "promoter": String,
-    "slug": String,
+  "token": String,
+  "promoter": String,
 }
 ```
 
 ## Enviroment variables
-- `DDB_REWARDS_TABLE` with information about rewards.
-- `DDB_ENTRIES_TABLE` with information about past rewards claims.
+- `REWARDS_TABLE` with information about rewards.
+- `ENTRIES_TABLE` with information about past rewards claims.
+- `MAX_RETRIES` specifies how many times the call to IG APIs is made.
+- `DELAY_BETWEEN_RETRIES` specifies how long should lambda wait between each call.
 
 ## Deployment
 Deploy with `npm run deploy:{env}`.

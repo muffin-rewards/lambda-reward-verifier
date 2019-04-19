@@ -37,7 +37,7 @@ exports.handler = async (event, _, callback) => {
       Key: {
         promoter: { S: message.promoter },
       },
-      TableName: process.env.DDB_REWARDS_TABLE,
+      TableName: process.env.REWARDS_TABLE,
       AttributesToGet: ['handle'],
     }).promise()
 
