@@ -17,6 +17,8 @@ event.body = {
 - `ENTRIES_TABLE` with information about past rewards claims.
 - `MAX_RETRIES` specifies how many times the call to IG APIs is made.
 - `DELAY_BETWEEN_RETRIES` specifies how long should lambda wait between each call.
+- `PROBATION_PERIOD` how many hours is the reward still available for given account.
+- `BLOCKED_PERIOD` how many hours has the user wait before redeeming a reward again.
 
 ## Deployment
 Deploy with `npm run deploy:{env}`.

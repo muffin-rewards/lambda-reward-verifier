@@ -41,7 +41,6 @@ exports.handler = async (event, _, callback) => {
       TableName: process.env.REWARDS_TABLE,
     }).promise()
 
-    // TODO: Check for non existence.
     if (!Item) {
       throw new RewardNotFoundException
     }
@@ -58,7 +57,10 @@ exports.handler = async (event, _, callback) => {
     console.log('error', error)
 
     return error instanceof LambdaException
-      ? respond(error.status, error.message)
-      : respond(422, 'Woops, something went wrong. Please, try again later.')
+      ? respond(error.status, JSON.stringify(error.message))
+      : respond(422, JSON.stringify({
+        label: 'Try Again Later',
+        message: 'Woops, something went wrong. Please, try again later.',
+      }))
   }
 }

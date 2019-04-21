@@ -20,7 +20,10 @@ exports.AlreadyRedeemedException = class AlreadyRedeemedException extends Lambda
    * @constructor
    */
   constructor () {
-    super(400, 'Reward Already Claimed!')
+    super(400, {
+      label: 'Reward Already Claimed!',
+      message: 'Only one reward can be claimed per account, per month.',
+    })
   }
 
 }
@@ -30,8 +33,11 @@ exports.PostNotFoundException = class PostNotFoundException extends LambdaExcept
   /**
    * @constructor
    */
-  constructor (handle) {
-    super(404, `No Post Found for @${handle} - please check the steps above`)
+  constructor () {
+    super(404, {
+      label: `No Post Found!`,
+      message: 'Please check the steps above.',
+    })
   }
 
 }
@@ -42,7 +48,10 @@ exports.RewardNotFoundException = class RewardNotFoundException extends LambdaEx
    * @constructor
    */
   constructor () {
-    super(404, 'Reward does not exist.')
+    super(404, {
+      label: 'Reward does not exist.',
+      message: 'Reward with this id does not exist in our database.',
+    })
   }
 
 }

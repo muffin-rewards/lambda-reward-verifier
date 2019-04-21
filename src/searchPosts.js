@@ -24,16 +24,18 @@ module.exports = async (token, handle) => {
     }
   }
 
-  throw new PostNotFoundException(handle)
+  throw new PostNotFoundException
 }
 
 const fetchPost = async (token, handle) => {
   // Gets the data from the APIs.
   const { data } = await axios.get(`${endpoint}?access_token=${token}`)
 
+  console.log(handle, data.data.map(post => post.caption.text))
+
   // Finds a valid post that includes restaurant handle in its caption.
   const post = data.data.find(
-    post => post.caption && post.caption.text.includes(handle),
+    post => post.caption && new RegExp(`@${handle}`, 'i').test(post.caption.text),
   )
 
   if (! post) {
