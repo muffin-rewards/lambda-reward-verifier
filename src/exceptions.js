@@ -6,7 +6,7 @@ class LambdaException extends Error {
    * @param {string} body Body to yield with the response
    */
   constructor (status, body) {
-    super(body)
+    super(JSON.stringify(body))
     this.status = status
   }
 

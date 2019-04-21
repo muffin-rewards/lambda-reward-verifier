@@ -22,13 +22,11 @@ module.exports = async (promoter, reward, post) => {
     AttributesToGet: ['redeemedAt'],
   }).promise()
 
-  console.log(Item)
-
-  if (Item && isBefore(Item.redeemedAt.S, process.env.PROBATION_PERIOD)) {
+  if (Item && isInPastHours(Item.redeemedAt.S, process.env.PROBATION_PERIOD)) {
     return
   }
 
-  if (Item && isBefore(Item.redeemedAt.S, process.env.BLOCKED_PERIOD)) {
+  if (Item && isInPastHours(Item.redeemedAt.S, process.env.BLOCKED_PERIOD)) {
     throw new AlreadyRedeemedException
   }
 
@@ -48,12 +46,14 @@ module.exports = async (promoter, reward, post) => {
 }
 
 /**
- * Whether `redeemedAt` is less than current day with given offset in hours.
+ * Whether `redeemedAt` is less than current time with given offset in hours.
  *
  * @param {number} redeemedAt Timestamp
  * @param {number} offset Hours
  * @return Whether `redeemedAt` is less
  */
-const isBefore = (redeemedAt, offset) => {
-  return Number(redeemedAt) < Date.now() + Number(offset) * 3600
+const isInPastHours = (redeemedAt, offset) => {
+  return Number(redeemedAt) > Date.now() - Number(offset) * 3600 * 1000
 }
+
+

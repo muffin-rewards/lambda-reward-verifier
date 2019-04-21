@@ -57,7 +57,7 @@ exports.handler = async (event, _, callback) => {
     console.log('error', error)
 
     return error instanceof LambdaException
-      ? respond(error.status, JSON.stringify(error.message))
+      ? respond(error.status, error.message)
       : respond(422, JSON.stringify({
         label: 'Try Again Later',
         message: 'Woops, something went wrong. Please, try again later.',
